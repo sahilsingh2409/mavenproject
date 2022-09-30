@@ -1,0 +1,31 @@
+node 
+{
+    stage("checkout from the git")
+    {
+            checkout([$class: 'GitSCM', branches: [[name: '*/subassignment1']], extensions: [], 
+            userRemoteConfigs: [[credentialsId: 'ee8a66b8-2fcb-4db4-8a2c-3185cb6dd3c1', 
+            url: 'https://git.nagarro.com/freshertraining2022/sahilsingh03.git']]])
+    }
+    
+    stage("Run Junit test cases")
+    {
+            sh 'mvn test'
+    }
+    
+    stage("Record Junit test cases")
+    {
+            junit 'target/surefire-reports/*.xml'
+    }
+     stage("Build")
+    {
+            sh 'mvn clean install'
+    }
+    
+    stage('SonarQube analysis') {
+         sh 'mvn sonar:sonar'
+   }
+    
+    
+    
+}
+
